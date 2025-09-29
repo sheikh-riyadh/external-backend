@@ -146,11 +146,9 @@ async function run() {
         const result = await popular.updateOne(filter, updateData, options);
         res.status(200).json(result);
       } catch (error) {
-        res
-          .status(500)
-          .json({
-            message: "An error occurred while updating the popular test",
-          });
+        res.status(500).json({
+          message: "An error occurred while updating the popular test",
+        });
       }
     });
     app.delete("/delete-populartest/:id", async (req, res) => {
@@ -169,6 +167,138 @@ async function run() {
       }
     });
     /* POPULAR END FROM HERE */
+
+    /* ASGAR-ALI START FROM HERE */
+    app.get("/get-asgaralitest", async (req, res) => {
+      const result = await asgarali.find({}).toArray();
+      const total = await asgarali.countDocuments({});
+      try {
+        res.status(200).json({ data: result, total });
+      } catch (error) {
+        res.status(500).json({ message: "An error occurred" });
+      }
+    });
+    app.post("/asgaralitest-create", async (req, res) => {
+      const data = {
+        ...req.body,
+        createdAt: moment().toISOString(),
+        date: moment().format("D"),
+        month: moment().format("MMM"),
+        year: moment().format("YYYY"),
+      };
+      try {
+        const result = await asgarali.insertOne(data);
+        if (result.acknowledged) {
+          res.status(201).json(result);
+        } else {
+          res.status(500).json({ message: "An error occurred" });
+        }
+      } catch (error) {
+        res.status(500).json({ message: "An error occurred" });
+      }
+    });
+    app.patch("/update-asgaralitest", async (req, res) => {
+      const { id, data } = req.body;
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      updateData = {
+        $set: {
+          ...data,
+        },
+      };
+
+      try {
+        const result = await asgarali.updateOne(filter, updateData, options);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(500).json({
+          message: "An error occurred while updating the popular test",
+        });
+      }
+    });
+    app.delete("/delete-asgaralitest/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const result = await asgarali.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 1) {
+          res
+            .status(200)
+            .json({ success: true, message: "Deleted successfully" });
+        } else {
+          res.status(404).json({ success: false, message: "Not found" });
+        }
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    });
+    /* ASGAR-ALI END FROM HERE */
+
+    /* MEDINOVA START FROM HERE */
+    app.get("/get-medinovatest", async (req, res) => {
+      const result = await medinova.find({}).toArray();
+      const total = await medinova.countDocuments({});
+      try {
+        res.status(200).json({ data: result, total });
+      } catch (error) {
+        res.status(500).json({ message: "An error occurred" });
+      }
+    });
+    app.post("/medinovatest-create", async (req, res) => {
+      const data = {
+        ...req.body,
+        createdAt: moment().toISOString(),
+        date: moment().format("D"),
+        month: moment().format("MMM"),
+        year: moment().format("YYYY"),
+      };
+      try {
+        const result = await medinova.insertOne(data);
+        if (result.acknowledged) {
+          res.status(201).json(result);
+        } else {
+          res.status(500).json({ message: "An error occurred" });
+        }
+      } catch (error) {
+        res.status(500).json({ message: "An error occurred" });
+      }
+    });
+    app.patch("/update-medinovatest", async (req, res) => {
+      const { id, data } = req.body;
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      updateData = {
+        $set: {
+          ...data,
+        },
+      };
+
+      try {
+        const result = await medinova.updateOne(filter, updateData, options);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(500).json({
+          message: "An error occurred while updating the popular test",
+        });
+      }
+    });
+    app.delete("/delete-medinovatest/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const result = await medinova.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 1) {
+          res
+            .status(200)
+            .json({ success: true, message: "Deleted successfully" });
+        } else {
+          res.status(404).json({ success: false, message: "Not found" });
+        }
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    });
+    /* MEDINOVA END FROM HERE */
   } finally {
   }
 }
