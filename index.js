@@ -38,10 +38,26 @@ async function run() {
 
     /* IBN SINA START FROM HERE */
     app.get("/get-ibnsinatest", async (req, res) => {
-      const result = await ibnsina.find({}).toArray();
-      const total = await ibnsina.countDocuments({});
+      const { page = 0, limit = 10, search = null } = req.query;
+
+      let results, total;
+
+      if (search) {
+        const doc = await ibnsina.findOne({ invoice: search });
+        results = doc ? [doc] : [];
+        total = results.length;
+      } else {
+        results = await ibnsina
+          .find({})
+          .sort({ _id: -1 })
+          .skip(parseInt(page) * parseInt(limit))
+          .limit(parseInt(limit))
+          .toArray();
+        total = await ibnsina.countDocuments({});
+      }
+
       try {
-        res.status(200).json({ data: result, total });
+        res.status(200).json({ data: results, total });
       } catch (error) {
         res.status(500).json({ message: "An error occurred" });
       }
@@ -104,10 +120,26 @@ async function run() {
 
     /* POPULAR START FROM HERE */
     app.get("/get-populartest", async (req, res) => {
-      const result = await popular.find({}).toArray();
-      const total = await popular.countDocuments({});
+      const { page = 0, limit = 10, search = null } = req.query;
+
+      let results, total;
+
+      if (search) {
+        const doc = await popular.findOne({ invoice: search });
+        results = doc ? [doc] : [];
+        total = results.length;
+      } else {
+        results = await popular
+          .find({})
+          .sort({ _id: -1 })
+          .skip(parseInt(page) * parseInt(limit))
+          .limit(parseInt(limit))
+          .toArray();
+        total = await popular.countDocuments({});
+      }
+
       try {
-        res.status(200).json({ data: result, total });
+        res.status(200).json({ data: results, total });
       } catch (error) {
         res.status(500).json({ message: "An error occurred" });
       }
@@ -170,10 +202,26 @@ async function run() {
 
     /* ASGAR-ALI START FROM HERE */
     app.get("/get-asgaralitest", async (req, res) => {
-      const result = await asgarali.find({}).toArray();
-      const total = await asgarali.countDocuments({});
+      const { page = 0, limit = 10, search = null } = req.query;
+
+      let results, total;
+
+      if (search) {
+        const doc = await asgarali.findOne({ invoice: search });
+        results = doc ? [doc] : [];
+        total = results.length;
+      } else {
+        results = await asgarali
+          .find({})
+          .sort({ _id: -1 })
+          .skip(parseInt(page) * parseInt(limit))
+          .limit(parseInt(limit))
+          .toArray();
+        total = await asgarali.countDocuments({});
+      }
+
       try {
-        res.status(200).json({ data: result, total });
+        res.status(200).json({ data: results, total });
       } catch (error) {
         res.status(500).json({ message: "An error occurred" });
       }
@@ -236,10 +284,26 @@ async function run() {
 
     /* MEDINOVA START FROM HERE */
     app.get("/get-medinovatest", async (req, res) => {
-      const result = await medinova.find({}).toArray();
-      const total = await medinova.countDocuments({});
+      const { page = 0, limit = 10, search = null } = req.query;
+
+      let results, total;
+
+      if (search) {
+        const doc = await medinova.findOne({ invoice: search });
+        results = doc ? [doc] : [];
+        total = results.length;
+      } else {
+        results = await medinova
+          .find({})
+          .sort({ _id: -1 })
+          .skip(parseInt(page) * parseInt(limit))
+          .limit(parseInt(limit))
+          .toArray();
+        total = await medinova.countDocuments({});
+      }
+
       try {
-        res.status(200).json({ data: result, total });
+        res.status(200).json({ data: results, total });
       } catch (error) {
         res.status(500).json({ message: "An error occurred" });
       }
