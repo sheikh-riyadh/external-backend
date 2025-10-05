@@ -53,7 +53,9 @@ async function run() {
     /* USER START FROM HERE */
 
     app.get("/get-overview", async (req, res) => {
-      const result = await overview.find({}).toArray();
+      const result = await overview
+        .find({ year: moment().format("YYYY") })
+        .toArray();
       res.status(200).json(result);
     });
 
@@ -87,7 +89,6 @@ async function run() {
       const data = {
         ...req.body,
         createdAt: moment().toISOString(),
-        date: moment().format("D"),
         month: moment().format("MMM"),
         year: moment().format("YYYY"),
       };
@@ -95,6 +96,7 @@ async function run() {
         const result = await ibnsina.insertOne(data);
         const result_2 = await overview.insertOne({
           month: moment().format("MMM"),
+          year: moment().format("YYYY"),
           name: "ibnsina",
           refId: result.insertedId.toHexString(),
         });
@@ -175,7 +177,6 @@ async function run() {
       const data = {
         ...req.body,
         createdAt: moment().toISOString(),
-        date: moment().format("D"),
         month: moment().format("MMM"),
         year: moment().format("YYYY"),
       };
@@ -183,6 +184,7 @@ async function run() {
         const result = await popular.insertOne(data);
         const result_2 = await overview.insertOne({
           month: moment().format("MMM"),
+          year: moment().format("YYYY"),
           name: "popular",
           refId: result.insertedId.toHexString(),
         });
@@ -263,7 +265,6 @@ async function run() {
       const data = {
         ...req.body,
         createdAt: moment().toISOString(),
-        date: moment().format("D"),
         month: moment().format("MMM"),
         year: moment().format("YYYY"),
       };
@@ -271,6 +272,7 @@ async function run() {
         const result = await asgarali.insertOne(data);
         const result_2 = await overview.insertOne({
           month: moment().format("MMM"),
+          year: moment().format("YYYY"),
           name: "asgarali",
           refId: result.insertedId.toHexString(),
         });
@@ -351,7 +353,6 @@ async function run() {
       const data = {
         ...req.body,
         createdAt: moment().toISOString(),
-        date: moment().format("D"),
         month: moment().format("MMM"),
         year: moment().format("YYYY"),
       };
@@ -359,6 +360,7 @@ async function run() {
         const result = await medinova.insertOne(data);
         const result_2 = await overview.insertOne({
           month: moment().format("MMM"),
+          year: moment().format("YYYY"),
           name: "medinova",
           refId: result.insertedId.toHexString(),
         });
