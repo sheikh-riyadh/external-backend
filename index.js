@@ -24,6 +24,9 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const database = client.db("external_test");
+    const user = database.collection("user");
+    const overview = database.collection("overview");
+
     const ibnsina = database.collection("ibnsina");
     await ibnsina.createIndex({ invoice: 1 }, { unique: true });
 
@@ -35,6 +38,24 @@ async function run() {
 
     const medinova = database.collection("medinova");
     await medinova.createIndex({ invoice: 1 }, { unique: true });
+
+    /* USER START FROM HERE */
+    app.post("/login", async (req, res) => {
+      const { userName, password } = req.body;
+      const response = await user.findOne(
+        { userName, password },
+        {
+          password: 0,
+        }
+      );
+      res.status(200).json(response);
+    });
+    /* USER START FROM HERE */
+
+    app.get("/get-overview", async (req, res) => {
+      const result = await overview.find({}).toArray();
+      res.status(200).json(result);
+    });
 
     /* IBN SINA START FROM HERE */
     app.get("/get-ibnsinatest", async (req, res) => {
@@ -72,7 +93,12 @@ async function run() {
       };
       try {
         const result = await ibnsina.insertOne(data);
-        if (result.acknowledged) {
+        const result_2 = await overview.insertOne({
+          month: moment().format("MMM"),
+          name: "ibnsina",
+          refId: result.insertedId.toHexString(),
+        });
+        if (result.acknowledged && result_2.acknowledged) {
           res.status(201).json(result);
         } else {
           res.status(500).json({ message: "An error occurred" });
@@ -105,7 +131,8 @@ async function run() {
       try {
         const { id } = req.params;
         const result = await ibnsina.deleteOne({ _id: new ObjectId(id) });
-        if (result.deletedCount === 1) {
+        const result_2 = await overview.deleteOne({ refId: id });
+        if (result.deletedCount === 1 && result_2.deletedCount === 1) {
           res
             .status(200)
             .json({ success: true, message: "Deleted successfully" });
@@ -154,7 +181,12 @@ async function run() {
       };
       try {
         const result = await popular.insertOne(data);
-        if (result.acknowledged) {
+        const result_2 = await overview.insertOne({
+          month: moment().format("MMM"),
+          name: "popular",
+          refId: result.insertedId.toHexString(),
+        });
+        if (result.acknowledged && result_2.acknowledged) {
           res.status(201).json(result);
         } else {
           res.status(500).json({ message: "An error occurred" });
@@ -187,7 +219,8 @@ async function run() {
       try {
         const { id } = req.params;
         const result = await popular.deleteOne({ _id: new ObjectId(id) });
-        if (result.deletedCount === 1) {
+        const result_2 = await overview.deleteOne({ refId: id });
+        if (result.deletedCount === 1 && result_2.deletedCount === 1) {
           res
             .status(200)
             .json({ success: true, message: "Deleted successfully" });
@@ -236,7 +269,12 @@ async function run() {
       };
       try {
         const result = await asgarali.insertOne(data);
-        if (result.acknowledged) {
+        const result_2 = await overview.insertOne({
+          month: moment().format("MMM"),
+          name: "asgarali",
+          refId: result.insertedId.toHexString(),
+        });
+        if (result.acknowledged && result_2.acknowledged) {
           res.status(201).json(result);
         } else {
           res.status(500).json({ message: "An error occurred" });
@@ -269,7 +307,8 @@ async function run() {
       try {
         const { id } = req.params;
         const result = await asgarali.deleteOne({ _id: new ObjectId(id) });
-        if (result.deletedCount === 1) {
+        const result_2 = await overview.deleteOne({ refId: id });
+        if (result.deletedCount === 1 && result_2.deletedCount === 1) {
           res
             .status(200)
             .json({ success: true, message: "Deleted successfully" });
@@ -318,7 +357,12 @@ async function run() {
       };
       try {
         const result = await medinova.insertOne(data);
-        if (result.acknowledged) {
+        const result_2 = await overview.insertOne({
+          month: moment().format("MMM"),
+          name: "medinova",
+          refId: result.insertedId.toHexString(),
+        });
+        if (result.acknowledged && result_2.acknowledged) {
           res.status(201).json(result);
         } else {
           res.status(500).json({ message: "An error occurred" });
@@ -351,7 +395,8 @@ async function run() {
       try {
         const { id } = req.params;
         const result = await medinova.deleteOne({ _id: new ObjectId(id) });
-        if (result.deletedCount === 1) {
+        const result_2 = await overview.deleteOne({ refId: id });
+        if (result.deletedCount === 1 && result_2.deletedCount === 1) {
           res
             .status(200)
             .json({ success: true, message: "Deleted successfully" });
